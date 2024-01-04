@@ -1,6 +1,6 @@
 # ElevatorSystem
 
-#Overview
+# Overview
 Elevator System is an application built in Django. It depicts real time elevator system providing functonlities like, adding a floor to elevator, seeing all the floors requested, opening door, closing door, maintainace, maintainance completed, current floor of elevator, its direction.
 
 # Local SetUP
