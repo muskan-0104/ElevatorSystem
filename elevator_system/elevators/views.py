@@ -137,10 +137,23 @@ class ElevatorViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=['post'])
     def open_door(self, request, pk=None):
         elevator = self.get_object()
-        if isElevatorWorking(elevator)==False:
-            return Response({'message': f'Door of elevator {pk} is under maintenance.Opening Denied!'}, status=status.HTTP_401_UNAUTHORIZED)
+            
+        closest_elevator=self.max_floors+1
+        elevator_id=-1
         
-        return Response({'message': f'Door of elevator {pk} opened successfully'})
+        for elevators in self.queryset:
+            print(elevators.id," ",elevators.current_floor)
+            if abs(int(elevators.current_floor)-int(pk)) <closest_elevator:
+                closest_elevator=abs(int(elevators.current_floor)-int(pk))
+                elevator_id=elevators.id
+
+        if pk in self.req_list:
+            self.req_list[int(elevator_id)].add(elevator_id)
+        else:
+            self.req_list[int(elevator_id)]=set([elevator_id])
+
+        
+        return Response({'message': f'Wait for elavator {elevator_id}, its closest to you'})
 
     @action(detail=True, methods=['post'])
     def close_door(self, request, pk=None):
